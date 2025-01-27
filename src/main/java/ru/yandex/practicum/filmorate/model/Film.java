@@ -16,7 +16,6 @@ import java.time.LocalDate;
  * Film.
  */
 @Data
-@Valid
 @AllArgsConstructor
 public class Film {
     long id;

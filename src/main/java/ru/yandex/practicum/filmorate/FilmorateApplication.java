@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ public class FilmorateApplication {
 		log.info("start "+ LocalDateTime.now());
 		SpringApplication.run(FilmorateApplication.class, args);
 		log.info("stop "+ LocalDateTime.now());
+
 	}
 
 }
