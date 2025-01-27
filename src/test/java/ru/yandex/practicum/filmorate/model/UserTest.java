@@ -1,28 +1,81 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDate;
+import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest
 class UserTest {
 
-    @Test
-    void setId() {
+    private static final Validator validator;
+
+    static {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.usingContext().getValidator();
     }
 
     @Test
-    void setEmail() {
+    void checktEmailBlank() {
+        User user = new User(2, "", "login", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty(), "Нельзя создать пустую почту");
     }
 
     @Test
-    void setLogin() {
+    void checktEmailNotBlank() {
+        User user = new User(2, "emailemail.com", "login", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty(), "Нельзя создать почту не по шаблоку");
     }
 
     @Test
-    void setName() {
+    void checktEmailValid() {
+        User user = new User(2, "email@email.com", "login", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertTrue(violations.isEmpty(), "ошибка создания почты  по шаблоку");
     }
 
     @Test
-    void setBirthday() {
+    void checktLoginBlank() {
+        User user = new User(2, "email@email.com", "", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty(), "Нельзя создать пустую почту");
+    }
+
+    @Test
+    void checktLoginWhitespace() {
+        User user = new User(2, "email@email.com", "log in", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty(), "Нельзя создать почту не по шаблоку");
+    }
+
+    @Test
+    void checktLoginValid() {
+        User user = new User(2, "email@email.com", "login", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertTrue(violations.isEmpty(), "ошибка создания почты  по шаблоку");
+    }
+
+    @Test
+    void checktBirthdayValid() {
+        User user = new User(2, "email@email.com", "login", "name", LocalDate.now().minusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertTrue(violations.isEmpty(), "ошибка создания почты  по шаблоку");
+    }
+
+    @Test
+    void checktBirthdayFuture() {
+        User user = new User(2, "email@email.com", "login", "name", LocalDate.now().plusDays(1));
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        assertFalse(violations.isEmpty(), "ошибка создания почты  по шаблоку");
     }
 }

@@ -4,71 +4,42 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final Map<Long, User> users = new HashMap<>();
+
+    Storage storage = new Storage();
 
     @GetMapping
-    public Collection<User> Users(){
-        return users.values();
+    public Collection<User> Users() {
+        return storage.getUsers().values();
     }
+
     @PutMapping
-    public User update(@Valid @RequestBody User user){
-        if (users.containsKey(user.getId())) {
-            User oldUser = users.get(user.getId());
-            oldUser.setEmail(user.getEmail());
-            oldUser.setLogin(user.getLogin());
-            oldUser.setBirthday(user.getBirthday());
-            oldUser.setName(user.getName());
-            return oldUser;
+    public User update(@Valid @RequestBody User user) {
+        log.info("start update film: {}", user);
+        if (storage.containsKeyUser(user)) {
+            storage.update(user);
+            log.info("stop update film: {}", user);
+            return user;
         }
-        throw new NotFoundException("Пользователь с id "+user.getId()+" не найден");
+        throw new NotFoundException("error update user: {" + user + "}");
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user){
-        if (checkUserBirthdayValid(user) && checkUserLoginValid(user)) {
-            user.setId(getNextId());
-            if (user.getName()==null) {
-                user.setName(user.getLogin());
-            }
-            users.put(user.getId(), user);
-        }
+    public User create(@Valid @RequestBody User user) {
+        log.info("start create film: {}", user);
+        user.setId(storage.getNextId(storage.getUsers()));
+        user.setName(user.getName() == null ? user.getLogin() : user.getName());
+        storage.save(user);
+        log.info("stop create film: {}", user);
         return user;
-    }
-
-    public boolean checkUserLoginValid(User user){
-        if(user.getLogin().contains(" ")) {
-            throw new ValidationException("Ошибка содержаться пробелы");
-        }
-        return true;
-    }
-
-    public boolean checkUserBirthdayValid(User user){
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        }
-    return true;
-    }
-
-    private long getNextId() {
-        long currentMaxId = users.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
     }
 }
