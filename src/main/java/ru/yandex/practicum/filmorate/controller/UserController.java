@@ -18,7 +18,7 @@ public class UserController {
     Storage storage = new Storage();
 
     @GetMapping
-    public Collection<User> Users() {
+    public Collection<User> users() {
         return storage.getUsers().values();
     }
 
