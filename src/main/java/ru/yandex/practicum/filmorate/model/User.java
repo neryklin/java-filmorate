@@ -13,14 +13,14 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class User {
-    long id;
+    private long id;
     @NotBlank
     @Email(message = "адрес не корректный")
-    String email;
+    private String email;
     @NotBlank(message = "пусто?")
     @NoWhitespace
-    String login;
-    String name;
+    private String login;
+    private String name;
     @Past
-    LocalDate birthday;
+    private LocalDate birthday;
 }

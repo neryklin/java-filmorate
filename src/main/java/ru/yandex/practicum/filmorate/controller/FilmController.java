@@ -14,7 +14,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    Storage storage = new Storage();
+    private Storage storage = new Storage();
 
     @GetMapping
     public Collection<Film> films() {

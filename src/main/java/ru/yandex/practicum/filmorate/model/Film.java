@@ -11,19 +11,16 @@ import ru.yandex.practicum.filmorate.validation.ReleaseDate;
 import java.time.LocalDate;
 
 
-/**
- * Film.
- */
 @Data
 @AllArgsConstructor
 public class Film {
-    long id;
+    private long id;
     @NotBlank
-    String name;
+    private String name;
     @Size(max = 200)
-    String description;
-    @ReleaseDate
-    LocalDate releaseDate;
+    private String description;
+    @ReleaseDate()
+    private LocalDate releaseDate;
     @Positive
-    int duration;
+    private int duration;
 }

@@ -15,7 +15,7 @@ import java.util.Collection;
 @RequestMapping("/users")
 public class UserController {
 
-    Storage storage = new Storage();
+    private Storage storage = new Storage();
 
     @GetMapping
     public Collection<User> users() {
