@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.web.util.pattern.PathPattern;
 
 import java.time.LocalDate;
 
