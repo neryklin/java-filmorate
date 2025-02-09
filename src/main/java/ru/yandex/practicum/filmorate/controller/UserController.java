@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
 import java.util.Collection;
 
@@ -15,18 +15,18 @@ import java.util.Collection;
 @RequestMapping("/users")
 public class UserController {
 
-    private Storage storage = new Storage();
+    private InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
 
     @GetMapping
     public Collection<User> users() {
-        return storage.getUsers().values();
+        return inMemoryUserStorage.getUsers().values();
     }
 
     @PutMapping
     public User update(@Valid @RequestBody User user) {
         log.info("start update film: {}", user);
-        if (storage.containsKeyUser(user)) {
-            storage.update(user);
+        if (inMemoryUserStorage.containsKeyUser(user)) {
+            inMemoryUserStorage.update(user);
             log.info("stop update film: {}", user);
             return user;
         }
@@ -36,9 +36,9 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         log.info("start create film: {}", user);
-        user.setId(storage.getNextId(storage.getUsers()));
+        user.setId(inMemoryUserStorage.getNextId(inMemoryUserStorage.getUsers()));
         user.setName(user.getName() == null ? user.getLogin() : user.getName());
-        storage.save(user);
+        inMemoryUserStorage.save(user);
         log.info("stop create film: {}", user);
         return user;
     }

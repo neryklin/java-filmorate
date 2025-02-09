@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.util.Collection;
 
@@ -14,18 +14,18 @@ import java.util.Collection;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private Storage storage = new Storage();
+    private InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
 
     @GetMapping
     public Collection<Film> films() {
-        return storage.getFilms().values();
+        return inMemoryFilmStorage.getFilms().values();
     }
 
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
         log.info("start create film: {}", film);
-        film.setId(storage.getNextId(storage.getFilms()));
-        storage.save(film);
+        film.setId(inMemoryFilmStorage.getNextId(inMemoryFilmStorage.getFilms()));
+        inMemoryFilmStorage.save(film);
         log.info("stop create film: {}", film);
         return film;
     }
@@ -33,8 +33,8 @@ public class FilmController {
     @PutMapping
     public Film update(@Valid @RequestBody Film film) {
         log.info("start update film: {}", film);
-        if (storage.containsKeyFilms(film)) {
-            storage.update(film);
+        if (inMemoryFilmStorage.containsKeyFilms(film)) {
+            inMemoryFilmStorage.update(film);
             log.info("stop update film: {}", film);
             return film;
         }

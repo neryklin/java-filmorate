@@ -8,6 +8,7 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.NoWhitespace;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @Data
@@ -23,4 +24,5 @@ public class User {
     private String name;
     @Past
     private LocalDate birthday;
+
 }
