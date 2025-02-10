@@ -1,11 +1,24 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
-/*Создайте FilmService, который будет отвечать за операции с фильмами — добавление и удаление лайка,
-вывод  10 наиболее популярных фильмов по количеству лайков. Пока пусть каждый пользователь может
-поставить лайк фильму только один раз.
- */
-@Service
+@Component
+@RequiredArgsConstructor
 public class FilmService {
+    private final InMemoryFilmStorage inMemoryFilmStorage;
+
+    public Film save(Film film) {
+        inMemoryFilmStorage.save(film);
+        return film;
+    }
+
+    public Film update(Film film) {
+        if (inMemoryFilmStorage.containsKeyFilms(film)) {
+            inMemoryFilmStorage.update(film);
+        }
+        return film;
+    }
 }

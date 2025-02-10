@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -9,12 +11,25 @@ import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 
 import java.util.Collection;
 
+//*Задание для самостоятельной работы
+//*Для контроллеров PostController и UserController добавьте аннотацию @ResponseStatus
+// таким образом, чтобы методы, обрабатывающие POST-запросы на создание пользователей и
+// публикаций возвращали ответ с кодом статуса 201 CREATED.
+//*        Аннотации, изученные в этой теме, помогут вам создавать разные контроллеры
+// для ваших сервисов. Следующий шаг — научиться работать с составными данными,
+// такими как файлы. Вперёд!
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
+
 public class FilmController {
-    private InMemoryFilmStorage inMemoryFilmStorage = new InMemoryFilmStorage();
+    private final InMemoryFilmStorage inMemoryFilmStorage;
+
+    @Autowired
+    public FilmController(InMemoryFilmStorage inMemoryFilmStorage) {
+        this.inMemoryFilmStorage = inMemoryFilmStorage;
+    }
 
     @GetMapping
     public Collection<Film> films() {

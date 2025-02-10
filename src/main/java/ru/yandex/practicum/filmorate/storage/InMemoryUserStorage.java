@@ -2,17 +2,19 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Getter
-public class InMemoryUserStorage implements UserStorage,CommonStorageMetods {
+public class InMemoryUserStorage implements CommonStorageMetods {
     private Map<Long, User> users = new HashMap<>();
 
-    @Override
     public User update(User user) {
         if (containsKeyUser(user)) {
             User oldUser = users.get(user.getId());
@@ -25,12 +27,10 @@ public class InMemoryUserStorage implements UserStorage,CommonStorageMetods {
         return user;
     }
 
-    @Override
     public boolean containsKeyUser(User user) {
         return users.containsKey(user.getId());
     }
 
-    @Override
     public User save(User user) {
         users.put(user.getId(), user);
         return user;
@@ -39,5 +39,11 @@ public class InMemoryUserStorage implements UserStorage,CommonStorageMetods {
     @Override
     public long getNextId(Map<Long, ?> map) {
         return CommonStorageMetods.super.getNextId(map);
+    }
+
+    public Optional<User> getUserById(Long id) {
+        Optional<User> user = Optional.of(users.get(id)).
+                orElseThrow(()->new NotFoundException("user not finde "+id))
+        return user;
     }
 }

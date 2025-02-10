@@ -1,12 +1,29 @@
 package ru.yandex.practicum.filmorate.service;
 
-import org.springframework.stereotype.Service;
-/*
-который будет отвечать за такие операции с пользователями, как добавление в друзья, у
-даление из друзей, вывод списка общих друзей. Пока пользователям не надо одобрять заявки в друзья — добавляем сразу.
-То есть если Лена стала другом Саши, то это значит, что Саша теперь друг Лены.
- */
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
-@Service
+@Component
+@RequiredArgsConstructor
 public class UserService {
+final InMemoryUserStorage inMemoryUserStorage;
+
+    public User update(User user) {
+        if (inMemoryUserStorage.containsKeyUser(user)) {
+            inMemoryUserStorage.update(user);
+            return user;
+        }
+        return user;
+    }
+
+    public User save(User user) {
+        inMemoryUserStorage.save(user);
+        return user;
+    }
+
+    public User getUserById(Long id){
+        return inMemoryUserStorage.getUserById(id).get();
+    }
 }
