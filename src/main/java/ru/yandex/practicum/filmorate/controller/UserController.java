@@ -4,11 +4,12 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 
-import java.util.Collection;
+
+import java.util.Map;
 
 //*Задание для самостоятельной работы
 //*Для контроллеров PostController и UserController добавьте аннотацию @ResponseStatus
@@ -20,34 +21,30 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
-
+@RequestMapping("/users")
 public class UserController {
 
-    private InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
-
+    private UserService userService = new UserService(new InMemoryUserStorage());
     @GetMapping
-    public Collection<User> users() {
-        return inMemoryUserStorage.getUsers().values();
+    @ResponseStatus(HttpStatus.OK)
+    public Map<Long, User> users() {
+        return userService.getUsers();
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.OK)
     public User update(@Valid @RequestBody User user) {
         log.info("start update film: {}", user);
-        if (inMemoryUserStorage.containsKeyUser(user)) {
-            inMemoryUserStorage.update(user);
-            log.info("stop update film: {}", user);
-            return user;
-        }
-        throw new NotFoundException("error update user: {" + user + "}");
+        userService.update(user);
+        log.info("stop update film: {}", user);
+        return user;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody User user) {
         log.info("start create film: {}", user);
-        user.setId(inMemoryUserStorage.getNextId(inMemoryUserStorage.getUsers()));
-        user.setName(user.getName() == null ? user.getLogin() : user.getName());
-        inMemoryUserStorage.save(user);
+        userService.save(user);
         log.info("stop create film: {}", user);
         return user;
     }

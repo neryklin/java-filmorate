@@ -21,7 +21,9 @@ public class InMemoryFriendStorage {
 
 
 
-    public User addFriends(User owner, User friend) {
+    public User addFriends(Long id, Long otherId) {
+        User owner = inMemoryUserStorage.getUserById(id).get();
+        User friend = inMemoryUserStorage.getUserById(otherId).get();
         if (friends.containsKey(owner.getId())) {
          friends.get(owner.getId()).add(friend);
         }else {
@@ -31,11 +33,17 @@ public class InMemoryFriendStorage {
         }
         return friend;
     }
-    public boolean containsKeyOwner(User user) {
-        return friends.containsKey(user.getId());
+    public boolean containsUser(User user) {
+        return friends.containsKey(user);
     }
 
-    public User delFriends(User owner, User friend) {
+    public boolean containsUserById(Long idUser) {
+        return friends.containsKey(inMemoryUserStorage.getUserById(idUser));
+    }
+
+    public User delFriends(Long id, Long otherId) {
+        User owner = inMemoryUserStorage.getUserById(id).get();
+        User friend = inMemoryUserStorage.getUserById(otherId).get();
         if (friends.containsKey(owner)) {
             friends.get(owner).remove(friend);
         }
@@ -44,8 +52,8 @@ public class InMemoryFriendStorage {
 
 
     public Set<User> getCommonFriends(Long id, Long otherId) {
-        User friend1 = inMemoryUserStorage.getUserById(id);
-        User friend2 = inMemoryUserStorage.getUserById(otherId);
+        User friend1 = inMemoryUserStorage.getUserById(id).get();
+        User friend2 = inMemoryUserStorage.getUserById(otherId).get();
         Set<User> friend2Set = friends.get(friend2);
         Set<User> commonFriend = friends.get(friend1).stream()
                 .filter(o->friend2Set.contains(o))

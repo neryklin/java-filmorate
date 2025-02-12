@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.service.UserService;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,8 +42,8 @@ public class InMemoryUserStorage implements CommonStorageMetods {
     }
 
     public Optional<User> getUserById(Long id) {
-        Optional<User> user = Optional.of(users.get(id)).
-                orElseThrow(()->new NotFoundException("user not finde "+id))
+        Optional<User> user = Optional.ofNullable(users.get(id));
+                user.orElseThrow(() -> new NotFoundException("user not finde " + id));
         return user;
     }
 }

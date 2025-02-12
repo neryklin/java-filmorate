@@ -11,8 +11,7 @@ import ru.yandex.practicum.filmorate.controller.ErrorResponse;
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        return new ErrorResponse("404 {}",e.getMessage());
+        return new ErrorResponse("400 {}",e.getMessage());
     }
 }

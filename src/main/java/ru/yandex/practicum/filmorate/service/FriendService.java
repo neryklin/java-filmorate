@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.InMemoryFriendStorage;
 
@@ -15,28 +16,28 @@ import java.util.stream.Collectors;
 public class FriendService {
 private final InMemoryFriendStorage inMemoryFriendStorage;
 
-    public User addFriends(User owner, User friend) {
-        inMemoryFriendStorage.addFriends(owner,friend);
-        return friend;
+    public User addFriends(Long id, Long othetId) {
+        return inMemoryFriendStorage.addFriends(id,othetId);
     }
 
 
-    public User delFriends(User owner, User friend) {
-        if (inMemoryFriendStorage.containsKeyOwner(owner)) {
-           inMemoryFriendStorage.delFriends(owner,friend);
+    public User delFriends(Long owner, Long friend) {
+        if (inMemoryFriendStorage.containsUserById(owner)) {
+            return inMemoryFriendStorage.delFriends(owner,friend);
+        } else {
+            throw new NotFoundException("not found owner : {" + owner + "}");
         }
-        return friend;
     }
 
-    public Optional<Set<User>> getCommonFriends(User friend1, User friend2) {
+    public Optional<Set<User>> getCommonFriends(Long friend1, Long friend2) {
         Set<User> commonFriend;
-        if (inMemoryFriendStorage.containsKeyOwner(friend1) && inMemoryFriendStorage.containsKeyOwner(friend2)) {
+        if (inMemoryFriendStorage.containsUserById(friend1) && inMemoryFriendStorage.containsUserById(friend2)) {
             commonFriend=inMemoryFriendStorage.getCommonFriends(friend1,friend2);
         } else {
             commonFriend = null;
         }
 
-        return Optional.of(commonFriend);
+        return Optional.ofNullable(commonFriend);
     }
 
 }
