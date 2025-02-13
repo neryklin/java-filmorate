@@ -1,59 +1,45 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
-
-//*Задание для самостоятельной работы
-//*Для контроллеров PostController и UserController добавьте аннотацию @ResponseStatus
-// таким образом, чтобы методы, обрабатывающие POST-запросы на создание пользователей и
-// публикаций возвращали ответ с кодом статуса 201 CREATED.
-//*        Аннотации, изученные в этой теме, помогут вам создавать разные контроллеры
-// для ваших сервисов. Следующий шаг — научиться работать с составными данными,
-// такими как файлы. Вперёд!
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
-
+@RequiredArgsConstructor
 public class FilmController {
-    private final InMemoryFilmStorage inMemoryFilmStorage;
 
-    @Autowired
-    public FilmController(InMemoryFilmStorage inMemoryFilmStorage) {
-        this.inMemoryFilmStorage = inMemoryFilmStorage;
-    }
+    private final FilmService filmService;
 
     @GetMapping
     public Collection<Film> films() {
-        return inMemoryFilmStorage.getFilms().values();
+        return filmService.getInMemoryFilmStorage().getFilms().values();
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Film create(@Valid @RequestBody Film film) {
         log.info("start create film: {}", film);
-        film.setId(inMemoryFilmStorage.getNextId(inMemoryFilmStorage.getFilms()));
-        inMemoryFilmStorage.save(film);
+        filmService.save(film);
         log.info("stop create film: {}", film);
         return film;
     }
 
     @PutMapping
+    @ResponseStatus(HttpStatus.OK)
     public Film update(@Valid @RequestBody Film film) {
         log.info("start update film: {}", film);
-        if (inMemoryFilmStorage.containsKeyFilms(film)) {
-            inMemoryFilmStorage.update(film);
-            log.info("stop update film: {}", film);
-            return film;
-        }
-        throw new NotFoundException("error update film: {" + film + "}");
+        filmService.update(film);
+        log.info("stop update film: {}", film);
+        return film;
+
     }
 
 

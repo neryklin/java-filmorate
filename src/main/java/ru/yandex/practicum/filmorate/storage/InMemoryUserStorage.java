@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -27,11 +26,17 @@ public class InMemoryUserStorage implements CommonStorageMetods {
         return user;
     }
 
+    public boolean containsUserById(Long idUser) {
+        return users.containsKey(getUserById(idUser).get().getId());
+    }
+
     public boolean containsKeyUser(User user) {
         return users.containsKey(user.getId());
     }
 
     public User save(User user) {
+        user.setId(getNextId(users));
+        user.setName(user.getName() == null ? user.getLogin() : user.getName());
         users.put(user.getId(), user);
         return user;
     }
@@ -43,7 +48,7 @@ public class InMemoryUserStorage implements CommonStorageMetods {
 
     public Optional<User> getUserById(Long id) {
         Optional<User> user = Optional.ofNullable(users.get(id));
-                user.orElseThrow(() -> new NotFoundException("user not finde " + id));
+        user.orElseThrow(() -> new NotFoundException("user not finde " + id));
         return user;
     }
 }

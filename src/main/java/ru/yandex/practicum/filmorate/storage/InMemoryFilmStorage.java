@@ -2,11 +2,12 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.Getter;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Getter
@@ -16,6 +17,7 @@ public class InMemoryFilmStorage implements CommonStorageMetods {
 
 
     public Film save(Film film) {
+        film.setId(getNextId(films));
         films.put(film.getId(), film);
         return film;
     }
@@ -41,5 +43,11 @@ public class InMemoryFilmStorage implements CommonStorageMetods {
     @Override
     public long getNextId(Map<Long, ?> map) {
         return CommonStorageMetods.super.getNextId(map);
+    }
+
+    public Optional<Film> getFilmById(Long id) {
+        Optional<Film> film = Optional.ofNullable(films.get(id));
+        film.orElseThrow(() -> new NotFoundException("user not finde " + id));
+        return film;
     }
 }

@@ -15,6 +15,6 @@ public class AfterOrEqualDataValidator implements ConstraintValidator<AfterOrEqu
 
     @Override
     public boolean isValid(LocalDate localDate, ConstraintValidatorContext constraintValidatorContext) {
-        return (data==null) || localDate.isAfter(data);
+        return (data == null) || localDate.isAfter(data);
     }
 }

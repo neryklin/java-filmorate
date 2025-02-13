@@ -8,7 +8,6 @@ import lombok.Data;
 import ru.yandex.practicum.filmorate.validation.NoWhitespace;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 
 @Data
