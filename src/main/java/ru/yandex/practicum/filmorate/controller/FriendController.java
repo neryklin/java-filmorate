@@ -9,6 +9,9 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FriendService;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -22,7 +25,7 @@ public class FriendController {
     @GetMapping("/users/{id}/friends")
     public Collection<User> getFriends(@Valid @PathVariable Long id) {
         log.info("get friends id: {}", id);
-        return friendService.getFriends(id).get();
+        return friendService.getFriends(id).orElse(new HashSet<User>());
     }
 
     @GetMapping("/users/{id}/friends/common/{otherId}")

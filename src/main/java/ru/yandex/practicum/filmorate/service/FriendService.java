@@ -26,7 +26,8 @@ public class FriendService {
 
 
     public User delFriends(Long owner, Long friend) {
-        if (inMemoryFriendStorage.containsUserById(owner) && inMemoryFriendStorage.containsUserById(friend)) {
+        if (inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(owner)
+                && inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(friend)) {
             inMemoryFriendStorage.delFriends(owner, friend);
             return inMemoryFriendStorage.delFriends(friend, owner);
         } else {
@@ -45,7 +46,7 @@ public class FriendService {
     }
 
     public Optional<Set<User>> getFriends(Long owner) {
-        if (inMemoryFriendStorage.containsUserById(owner)) {
+        if (inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(owner)) {
             return Optional.ofNullable(inMemoryFriendStorage.getFriends(owner));
         } else {
             throw new NotFoundException("not found owner : {" + owner + "}");
