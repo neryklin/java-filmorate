@@ -47,7 +47,7 @@ public class InMemoryFilmStorage implements CommonStorageMetods {
 
     public Optional<Film> getFilmById(Long id) {
         Optional<Film> film = Optional.ofNullable(films.get(id));
-        film.orElseThrow(() -> new NotFoundException("user not finde " + id));
+        film.orElseThrow(() -> new NotFoundException("film not finde " + id));
         return film;
     }
 }
