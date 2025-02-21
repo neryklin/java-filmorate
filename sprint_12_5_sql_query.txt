@@ -1,0 +1,17 @@
+/* get top 10*/
+SELECT film_id,
+sum(user_id) as sumlikes
+FROM Likes
+GROUP BY film_id
+ORDER BY sumlikes desc
+LIMIT 10
+
+/*get common frinds*/
+
+SELECT firsttabel.friend_id
+FROM friends
+WHERE user_id=param_user1 as firsttabel
+INNER JOIN (
+SELECT friend_id
+FROM friends
+WHERE user_id=param_user2) as secondtabel ON firsttabel.friend_id=secondtabel.friend_id
