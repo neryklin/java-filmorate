@@ -1,13 +1,12 @@
-package ru.yandex.practicum.filmorate.model;
-
+package ru.yandex.practicum.filmorate.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import ru.yandex.practicum.filmorate.model.Genre;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.validation.AfterOrEqualData;
 
 import java.time.LocalDate;
@@ -15,11 +14,8 @@ import java.util.HashSet;
 
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Film {
+public class NewFilmRequest {
     HashSet<Genre> genres;
-    private long id;
     @NotBlank
     private String name;
     @Size(max = 200)
@@ -30,7 +26,5 @@ public class Film {
     private int duration;
     @NotNull
     private Mpa mpa;
-
-//    @Positive
-//    private long id;
 }
+

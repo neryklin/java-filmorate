@@ -2,55 +2,52 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dal.FriendRepository;
+import ru.yandex.practicum.filmorate.dal.UserRepository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.InMemoryFriendStorage;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class FriendService {
-    private final InMemoryFriendStorage inMemoryFriendStorage;
+    private final FriendRepository friendRepository;
+    private final UserRepository userRepository;
+
 
     public User addFriends(Long id, Long othetId) {
-        if (inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(id)
-                && inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(othetId)) {
-            inMemoryFriendStorage.addFriends(id, othetId);
-            return inMemoryFriendStorage.addFriends(othetId, id);
-        } else {
-            throw new NotFoundException("not found owner : {" + id + " " + othetId + "}");
-        }
+        User user = userRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("User not found " + id));
+        User fUser = userRepository.findById(othetId).
+                orElseThrow(() -> new NotFoundException("User not found " + othetId));
+        return friendRepository.addFriend(user, fUser);
     }
 
 
-    public User delFriends(Long owner, Long friend) {
-        if (inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(owner)
-                && inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(friend)) {
-            inMemoryFriendStorage.delFriends(owner, friend);
-            return inMemoryFriendStorage.delFriends(friend, owner);
-        } else {
-            throw new NotFoundException("not found owner : {" + owner + " " + friend + "}");
-        }
+    public User deleteFriends(Long id, Long othetId) {
+        User user = userRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("User not found " + id));
+        User fUser = userRepository.findById(othetId).
+                orElseThrow(() -> new NotFoundException("User not found " + othetId));
+        return friendRepository.deleteFriend(user, fUser);
     }
 
-    public Optional<Set<User>> getCommonFriends(Long friend1, Long friend2) {
-        Set<User> commonFriend;
-        if (inMemoryFriendStorage.containsUserById(friend1) && inMemoryFriendStorage.containsUserById(friend2)) {
-            commonFriend = inMemoryFriendStorage.getCommonFriends(friend1, friend2);
-        } else {
-            commonFriend = null;
-        }
-        return Optional.ofNullable(commonFriend);
-    }
+//    public Optional<Set<User>> getCommonFriends(Long friend1, Long friend2) {
+//        Set<User> commonFriend;
+//        if (inMemoryFriendStorage.containsUserById(friend1) && inMemoryFriendStorage.containsUserById(friend2)) {
+//            commonFriend = inMemoryFriendStorage.getCommonFriends(friend1, friend2);
+//        } else {
+//            commonFriend = null;
+//        }
+//        return Optional.ofNullable(commonFriend);
+//    }
 
-    public Optional<Set<User>> getFriends(Long owner) {
-        if (inMemoryFriendStorage.getInMemoryUserStorage().containsUserById(owner)) {
-            return Optional.ofNullable(inMemoryFriendStorage.getFriends(owner));
-        } else {
-            throw new NotFoundException("not found owner : {" + owner + "}");
-        }
+    public Optional<List<User>> getFriends(Long id) {
+        User user = userRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("User not found " + id));
+        return Optional.ofNullable(friendRepository.getFriendById(user));
     }
 
 }
