@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.FriendService;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 
 @Slf4j
@@ -26,14 +25,14 @@ public class FriendController {
     @GetMapping("/users/{id}/friends")
     public Collection<User> getFriends(@PathVariable @Min(0) Long id) {
         log.info("get friends id: {}", id);
-        return friendService.getFriends(id).orElse(new HashSet<User>());
+        return friendService.getFriends(id).get();
     }
 
-    @GetMapping("/users/{id}/friends/common/{otherId}")
-    public Collection<User> getCommonFriends(@PathVariable @Min(0) Long id, @PathVariable @Min(0) Long otherId) {
-        log.info("get common friends id: {} {}", id, otherId);
-        return friendService.getCommonFriends(id, otherId).get();
-    }
+//    @GetMapping("/users/{id}/friends/common/{otherId}")
+//    public Collection<User> getCommonFriends(@PathVariable @Min(0) Long id, @PathVariable @Min(0) Long otherId) {
+//        log.info("get common friends id: {} {}", id, otherId);
+//        return friendService.getCommonFriends(id, otherId).get();
+//    }
 
     @PutMapping("/users/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.OK)
@@ -44,8 +43,9 @@ public class FriendController {
 
     @DeleteMapping("/users/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.OK)
-    public User delFriends(@Valid @PathVariable @Min(0) Long id, @PathVariable @Min(0) Long friendId) {
+    public User deleteFriends(@Valid @PathVariable @Min(0) Long id, @PathVariable @Min(0) Long friendId) {
         log.info("del friends id: {} {}", id, friendId);
-        return friendService.delFriends(id, friendId);
+        return friendService.deleteFriends(id, friendId);
     }
 }
+
