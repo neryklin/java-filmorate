@@ -18,19 +18,19 @@ public class FriendService {
 
 
     public User addFriends(Long id, Long othetId) {
-        User user = userRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("User not found " + id));
-        User fUser = userRepository.findById(othetId).
-                orElseThrow(() -> new NotFoundException("User not found " + othetId));
+        User user = userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("User not found " + id));
+        User fUser = userRepository.findById(othetId)
+                        .orElseThrow(() -> new NotFoundException("User not found " + othetId));
         return friendRepository.addFriend(user, fUser);
     }
 
 
     public User deleteFriends(Long id, Long othetId) {
-        User user = userRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("User not found " + id));
-        User fUser = userRepository.findById(othetId).
-                orElseThrow(() -> new NotFoundException("User not found " + othetId));
+        User user = userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("User not found " + id));
+        User fUser = userRepository.findById(othetId)
+                        .orElseThrow(() -> new NotFoundException("User not found " + othetId));
         return friendRepository.deleteFriend(user, fUser);
     }
 
@@ -45,8 +45,8 @@ public class FriendService {
 //    }
 
     public Optional<List<User>> getFriends(Long id) {
-        User user = userRepository.findById(id).
-                orElseThrow(() -> new NotFoundException("User not found " + id));
+        User user = userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("User not found " + id));
         return Optional.ofNullable(friendRepository.getFriendById(user));
     }
 
