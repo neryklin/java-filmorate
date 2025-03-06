@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.dal;
 
 
-import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -23,10 +22,6 @@ public class UserRepository extends BaseRepository<User> {
     public UserRepository(JdbcTemplate jdbc, RowMapper<User> mapper) {
         super(jdbc, mapper);
     }
-
-//    public UserRepository(JdbcTemplate jdbc, RowMapper<User> mapper) {
-//        super(jdbc, mapper);
-//    }
 
     public List<User> findAll() {
         return findMany(FIND_ALL_QUERY);

@@ -54,15 +54,6 @@ public class FilmRepository extends BaseRepository<Film> {
         return genreHashSet;
     }
 
-//    public HashSet<Genre> getGenreSet(Long filmId) {
-//        HashSet<Genre> genreHashSet = new HashSet<>();
-//        List<HashSet<Genre>> hashSetList =  filmGenreRepository.getGenreByFilmId(filmId).orElseThrow();
-//        if (hashSetList.size()>0) {
-//            genreHashSet= hashSetList.get(0);
-//        }
-//        return genreHashSet;
-//    }
-
     public Film save(Film film) {
         Long id = insert(
                 INSERT_QUERY,
@@ -73,7 +64,6 @@ public class FilmRepository extends BaseRepository<Film> {
                 film.getMpa().getId()
         );
         film.setId(id);
-        //film.setGenres(new HashSet<Genre>());
         return film;
     }
 
@@ -87,7 +77,6 @@ public class FilmRepository extends BaseRepository<Film> {
                 film.getDuration(),
                 film.getMpa().getId(),
                 film.getId()
-
         );
         return film;
     }

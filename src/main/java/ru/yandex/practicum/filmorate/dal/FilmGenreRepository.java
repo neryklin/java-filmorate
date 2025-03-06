@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.dal;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import java.util.*;
 
 @Repository
+@ComponentScan
 public class FilmGenreRepository {
     //  private final JdbcTemplate jdbc2;
     private static final String FIND_ALL_QUERY = "SELECT FILM_ID, genre.id ,genre.name FROM FILMGENRE " +

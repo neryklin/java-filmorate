@@ -31,5 +31,5 @@ public class Film {
     private int duration;
     @NotNull
     private Mpa mpa;
-    HashSet<Genre> genres;
+    private HashSet<Genre> genres;
 }
