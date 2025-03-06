@@ -23,7 +23,19 @@ public class FriendRepository {
             FROM friend
             JOIN users ON users.id=FRIEND_ID
             WHERE users_id=:users_id""";
-    //  protected final RowMapper<Map<Long,List<Genre>>> mapper;
+
+    private static final String FIND_COMMON_FRIENDS_QUERY = """
+            SELECT *
+            FROM(SELECT fr1.FRIEND_ID AS ffr1,
+            count(fr1.FRIEND_ID) AS comfr
+            FROM friend AS fr1
+            WHERE fr1.USERS_ID IN (:user1,:user2)
+            GROUP BY fr1.FRIEND_ID
+            HAVING comfr>1) AS tablecomm
+            JOIN users ON tablecomm.ffr1=users.id
+            """;
+
+
     private final NamedParameterJdbcOperations jdbc;
     private final UserRowMapper userRowMapper;
 
@@ -47,5 +59,12 @@ public class FriendRepository {
         map.addValue("friend_id", fuser.getId());
         jdbc.update(DELETE_QUERY, map);
         return user;
+    }
+
+    public List<User> getCommonFriends(User user1, User user2) {
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("user1", user1.getId());
+        map.addValue("user2", user2.getId());
+        return jdbc.query(FIND_COMMON_FRIENDS_QUERY, map, userRowMapper);
     }
 }

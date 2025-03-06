@@ -18,7 +18,8 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Film {
-    HashSet<Genre> genres;
+
+
     private long id;
     @NotBlank
     private String name;
@@ -30,7 +31,5 @@ public class Film {
     private int duration;
     @NotNull
     private Mpa mpa;
-
-//    @Positive
-//    private long id;
+    HashSet<Genre> genres;
 }

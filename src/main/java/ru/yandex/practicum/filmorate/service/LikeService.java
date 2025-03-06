@@ -10,6 +10,8 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.List;
+
 @Component
 @Getter
 @RequiredArgsConstructor
@@ -28,14 +30,15 @@ public class LikeService {
 
     public void deleteLike(Long id, Long userId) {
         User user = userRepository.findById(userId)
-        .orElseThrow(() -> new NotFoundException("User not found " + userId));
+                .orElseThrow(() -> new NotFoundException("User not found " + userId));
         Film film = filmRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("Film not found " + id));
+                .orElseThrow(() -> new NotFoundException("Film not found " + id));
         likeRepository.deleteLike(film, user);
     }
 
 
-//    public List<Film> getTopFilms(int count) {
-//        return inMemoryLikeStorage.getTopFilms(count);
-//    }
+    public List<Film> getTopFilms(int count) {
+
+        return likeRepository.getTopFilm(count);
+    }
 }

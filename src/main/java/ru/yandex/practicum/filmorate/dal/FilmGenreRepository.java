@@ -1,54 +1,59 @@
 package ru.yandex.practicum.filmorate.dal;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
+
+import java.util.*;
 
 @Repository
 public class FilmGenreRepository {
     //  private final JdbcTemplate jdbc2;
     private static final String FIND_ALL_QUERY = "SELECT FILM_ID, genre.id ,genre.name FROM FILMGENRE " +
             "JOIN genre ON GENRE_ID =GENRE.ID ";
-    private static final String FIND_BY_ID_QUERY = "SELECT * FROM filmgenre WHERE film_id = ?";
+    private static final String FIND_BY_ID_QUERY = """
+            SELECT GENRE.ID,
+            GENRE.NAME
+            FROM (
+            SELECT * FROM filmgenre WHERE film_id = :film_id
+            )
+            JOIN genre ON GENRE_ID =GENRE.ID
+            ORDER BY GENRE.ID""";
+
     private static final String INSERT_QUERY = "INSERT INTO filmgenre(film_id, genre_id)" +
             " VALUES (:film_id, :genre_id)";
     private static final String DELETE_QUERY = "INSERT INTO filmgenre(film_id, genre_id)" +
             " VALUES (?, ?)";
-    private final NamedParameterJdbcOperations jdbc;
+    private final NamedParameterJdbcTemplate jdbc;
 
-    public FilmGenreRepository(NamedParameterJdbcOperations jdbc, JdbcTemplate jdbc2) {
+    public FilmGenreRepository(NamedParameterJdbcTemplate jdbc) {
         this.jdbc = jdbc;
 
     }
 
+    public Optional<List<HashSet<Genre>>> getGenreByFilmId(Long filmid) {
+        MapSqlParameterSource map = new MapSqlParameterSource();
+        map.addValue("film_id", filmid);
+        HashSetGenreRowMapper hashSetGenreRowMapper = new HashSetGenreRowMapper();
+        return Optional.ofNullable(jdbc.query(FIND_BY_ID_QUERY, map, hashSetGenreRowMapper));
+    }
 
     public Long save(Film film) {
 
-//        //SqlParameterSource[] batch = SqlParameterSourceUtils.createBatch(film.getGenres());
-////
-//////        MapSqlParameterSource map = new MapSqlParameterSource();
-////
-//////        Map<String,Object> batchValues = new HashMap<>();
-//        //List<Object[]> bk = new ArrayList<Object[]>();
-//      List<Object[]> batch = new ArrayList<Object[]>();
-//        for (Genre genre : film.getGenres()) {
-////            Object[] values = new Object[]{film.getId(),genre.getId()};
-//          Object[] values = new Object[] {film.getId(),genre.getId()};
-////                  actor.getFirstName(), actor.getLastName(), actor.getId()};
-//            batch.add(values);
-//        }
-////
-////
-//        jdbc.batchUpdate(INSERT_QUERY,batch);
-////        //jdbc.update(INSERT_QUERY,map);
-////
-//////        MapSqlParameterSource map2 = new MapSqlParameterSource();
-//////        map.addValue("film_id",film.getId());
-//////        map.addValue("genre_id",3);
-//////        jdbc.update(INSERT_QUERY,map);
-////
+        Map<String, Object>[] batchOfInputs = new HashMap[film.getGenres().size()];
+        int count = 0;
+        for (Genre genre : film.getGenres()) {
+            Map<String, Object> map = new HashMap();
+            map.put("film_id", film.getId());
+            map.put("genre_id", genre.getId());
+            batchOfInputs[count++] = map;
+
+        }
+        jdbc.batchUpdate(INSERT_QUERY, batchOfInputs);
         return film.getId();
+
     }
 
 

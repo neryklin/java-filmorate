@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 @Data
 public class FilmDto {
-    HashSet<Genre> genres;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
     private String name;
@@ -18,4 +18,5 @@ public class FilmDto {
     private LocalDate releaseDate;
     private int duration;
     private Mpa mpa;
+    private HashSet<Genre> genres;
 }

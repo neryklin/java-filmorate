@@ -6,7 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.LikeService;
+
+import java.util.Collection;
 
 
 @Slf4j
@@ -18,11 +21,11 @@ public class LikeController {
 
     private final LikeService likeService;
 
-//    @GetMapping("/films/popular")
-//    public Collection<Film> getTopFilm(@RequestParam(defaultValue = "10") @Min(0) int count) {
-//        log.info("get top film {}", count);
-////        return likeService.getTopFilms(count);
-//    }
+    @GetMapping("/films/popular")
+    public Collection<Film> getTopFilm(@RequestParam(defaultValue = "10") @Min(0) int count) {
+        log.info("get top film {}", count);
+        return likeService.getTopFilms(count);
+    }
 
     @PutMapping("/films/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)

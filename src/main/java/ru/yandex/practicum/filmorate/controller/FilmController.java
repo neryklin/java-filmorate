@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,11 +28,11 @@ public class FilmController {
         return filmService.getFilms();
     }
 
-//    @GetMapping("/films/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public FilmDto film(@PathVariable @Min(0) Long id) {
-//        return filmService.getFilmById(id).get();
-//    }
+    @GetMapping("/films/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public FilmDto film(@PathVariable @Min(0) Long id) {
+        return filmService.getFilmsById(id);
+    }
 
     @PostMapping("/films")
     @ResponseStatus(HttpStatus.CREATED)

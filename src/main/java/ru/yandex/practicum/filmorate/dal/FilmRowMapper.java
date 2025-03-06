@@ -4,6 +4,7 @@ package ru.yandex.practicum.filmorate.dal;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
@@ -20,11 +21,9 @@ public class FilmRowMapper implements RowMapper<Film> {
                 resultSet.getString("description"),
                 resultSet.getDate("releasedate").toLocalDate(),
                 resultSet.getInt("duration"),
-                //(Mpa) resultSet.getObject("mpa_id"),
                 new Mpa(resultSet.getLong("mpa_id"), ""),
-                new HashSet<>()
+                new HashSet<Genre>()
         );
         return film;
-        //   return new Film();
     }
 }

@@ -17,37 +17,34 @@ public class FriendService {
     private final UserRepository userRepository;
 
 
-    public User addFriends(Long id, Long othetId) {
-        User user = userRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("User not found " + id));
-        User fUser = userRepository.findById(othetId)
-                        .orElseThrow(() -> new NotFoundException("User not found " + othetId));
-        return friendRepository.addFriend(user, fUser);
+    public Optional<User> addFriends(Long id, Long othetId) {
+        User user = checkGetUser(id);
+        User fUser = checkGetUser(othetId);
+        return Optional.ofNullable(friendRepository.addFriend(user, fUser));
     }
 
 
-    public User deleteFriends(Long id, Long othetId) {
-        User user = userRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("User not found " + id));
-        User fUser = userRepository.findById(othetId)
-                        .orElseThrow(() -> new NotFoundException("User not found " + othetId));
-        return friendRepository.deleteFriend(user, fUser);
+    public Optional<User> deleteFriends(Long id, Long othetId) {
+        User user = checkGetUser(id);
+        User fUser = checkGetUser(othetId);
+        return Optional.ofNullable(friendRepository.deleteFriend(user, fUser));
     }
 
-//    public Optional<Set<User>> getCommonFriends(Long friend1, Long friend2) {
-//        Set<User> commonFriend;
-//        if (inMemoryFriendStorage.containsUserById(friend1) && inMemoryFriendStorage.containsUserById(friend2)) {
-//            commonFriend = inMemoryFriendStorage.getCommonFriends(friend1, friend2);
-//        } else {
-//            commonFriend = null;
-//        }
-//        return Optional.ofNullable(commonFriend);
-//    }
+    public Optional<List<User>> getCommonFriends(Long friend1, Long friend2) {
+        User user1 = checkGetUser(friend1);
+        User user2 = checkGetUser(friend2);
+        return Optional.ofNullable(friendRepository.getCommonFriends(user1, user2));
+    }
 
     public Optional<List<User>> getFriends(Long id) {
-        User user = userRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundException("User not found " + id));
+        User user = checkGetUser(id);
         return Optional.ofNullable(friendRepository.getFriendById(user));
+    }
+
+    public User checkGetUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found " + id));
+        return user;
     }
 
 }

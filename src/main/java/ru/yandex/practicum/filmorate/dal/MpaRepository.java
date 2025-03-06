@@ -28,7 +28,6 @@ public class MpaRepository extends BaseRepository<Mpa> {
     }
 
     public Optional<Mpa> findById(long mpaId) {
-
         return findOne(FIND_BY_ID_QUERY, mpaId);
     }
 

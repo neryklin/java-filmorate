@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.dal;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@ComponentScan
 public class BaseRepository<T> {
     protected final JdbcTemplate jdbc;
     protected final RowMapper<T> mapper;

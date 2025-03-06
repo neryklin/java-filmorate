@@ -24,6 +24,7 @@ public class FilmService {
     private final FilmGenreRepository filmGenreRepository;
     private final GenreRepository genreRepository;
     private final GenreService genreService;
+    private final MpaService mpaService;
 
 
     public Collection<FilmDto> getFilms() {
@@ -33,18 +34,25 @@ public class FilmService {
                 .collect(Collectors.toList());
     }
 
+    public FilmDto getFilmsById(Long id) {
+        return FilmMapper.mapToFilmDto(filmRepository.findById(id).get());
+    }
+
 
     public FilmDto createFilm(NewFilmRequest request) {
         if (request.getName() == null || request.getName().isEmpty()) {
             throw new ValidationException("Название должено быть указано");
         }
-        if (genreService.checkGerneList(request.getGenres()) == false) {
-            new NotFoundException("Genre not found ");
+        if (mpaService.getMpaById(request.getMpa().getId()) == null) {
+            throw new NotFoundException("MPA not found ");
         }
 
         Film film = FilmMapper.mapToFilm(request);
         film = filmRepository.save(film);
-        Long id = filmGenreRepository.save(film);
+        if (request.getGenres() != null && genreService.checkGerneList(request.getGenres()) != false) {
+            Long id = filmGenreRepository.save(film);
+        }
+
         return FilmMapper.mapToFilmDto(film);
     }
 
@@ -55,4 +63,5 @@ public class FilmService {
         updatedFilm = filmRepository.update(updatedFilm);
         return FilmMapper.mapToFilmDto(updatedFilm);
     }
+
 }
