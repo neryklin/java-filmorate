@@ -37,34 +37,8 @@ public class UserController {
 
     @PutMapping
     public UserDto updateUser(@Valid @RequestBody UpdateUserRequest updateUserRequest) {
-        //@PathVariable("userId") long userId,
         log.info("start update user: {}", updateUserRequest);
-        //userService.updateUser(1L, user);
         return userService.updateUser(updateUserRequest.getId(), updateUserRequest);
-        //    return new UserDto();
     }
 
-//    @GetMapping("/users/{id}")
-//    @ResponseStatus(HttpStatus.OK)
-//    public User user(@PathVariable @Min(0) Long id) {
-//        return userService.getInMemoryUserStorage().getUserById(id).get();
-//    }
-//
-//    @PutMapping("/users")
-//    @ResponseStatus(HttpStatus.OK)
-//    public User update(@Valid @RequestBody User user) {
-//        log.info("start update film: {}", user);
-//        userService.update(user);
-//        log.info("stop update film: {}", user);
-//        return user;
-//    }
-//
-//    @PostMapping("/users")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public User create(@Valid @RequestBody User user) {
-//        log.info("start create film: {}", user);
-//        userService.save(user);
-//        log.info("stop create film: {}", user);
-//        return user;
-//    }
 }

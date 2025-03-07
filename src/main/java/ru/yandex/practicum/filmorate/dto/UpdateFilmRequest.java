@@ -14,7 +14,7 @@ import java.util.HashSet;
 
 @Data
 public class UpdateFilmRequest {
-    HashSet<Genre> genres;
+    private HashSet<Genre> genres;
     private long id;
     @NotBlank
     private String name;

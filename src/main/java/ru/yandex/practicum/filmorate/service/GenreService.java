@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,8 +30,13 @@ public class GenreService {
     }
 
     public boolean checkGerneList(HashSet<Genre> setGenre) {
+        List<Long> arrayListGenre = getGenres().stream()
+                .map(Genre::getId)
+                .toList();
         for (Genre genre : setGenre) {
-            getGenreById(genre.getId());
+            if (arrayListGenre.contains(genre.getId()) == false) {
+                throw new NotFoundException("Genre не найден");
+            }
         }
         return true;
     }

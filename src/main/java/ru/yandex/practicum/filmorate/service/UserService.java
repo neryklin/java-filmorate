@@ -49,18 +49,4 @@ public class UserService {
         updatedUser = userRepository.update(updatedUser);
         return UserMapper.mapToUserDto(updatedUser);
     }
-
-
-//    public User update(User user) {
-//        if (inMemoryUserStorage.containsKeyUser(user)) {
-//            inMemoryUserStorage.update(user);
-//            return user;
-//        } else {
-//            throw new NotFoundException("user not found");
-//        }
-//
-//    }
-//
-
-
 }
