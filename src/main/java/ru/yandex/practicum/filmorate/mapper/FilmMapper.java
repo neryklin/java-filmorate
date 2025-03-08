@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.dto.NewFilmRequest;
 import ru.yandex.practicum.filmorate.dto.UpdateFilmRequest;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
@@ -15,11 +16,11 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FilmMapper {
 
-    private long id;
-    private String name;
-    private String description;
-    private LocalDate releaseDate;
-    private int duration;
+//    private long id;
+//    private String name;
+//    private String description;
+//    private LocalDate releaseDate;
+//    private int duration;
 
     public static FilmDto mapToFilmDto(Film film) {
         FilmDto filmDto = new FilmDto();
@@ -29,6 +30,7 @@ public final class FilmMapper {
         filmDto.setReleaseDate(film.getReleaseDate());
         filmDto.setDuration(film.getDuration());
         filmDto.setMpa(film.getMpa());
+        filmDto.setDirector(film.getDirector());
         filmDto.setGenres(film.getGenres());
         return filmDto;
     }
@@ -40,6 +42,8 @@ public final class FilmMapper {
         film.setReleaseDate(request.getReleaseDate());
         film.setDuration(request.getDuration());
         film.setMpa(new Mpa(request.getMpa().getId(), request.getMpa().getName()));
+        film.setDirector(new Director(request.getDirector().getId(), request.getDirector().getName()));
+
         film.setGenres(request.getGenres());
         return film;
     }

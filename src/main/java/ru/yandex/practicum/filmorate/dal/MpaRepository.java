@@ -31,18 +31,18 @@ public class MpaRepository extends BaseRepository<Mpa> {
         return findOne(FIND_BY_ID_QUERY, mpaId);
     }
 
-    public Film save(Film film) {
-        Long id = insert(
-                INSERT_QUERY,
-                film.getName(),
-                film.getDescription(),
-                LocalDate.from(film.getReleaseDate()),
-                film.getDuration(),
-                film.getMpa()
-        );
-        film.setId(id);
-        return film;
-    }
+//    public Film save(Film film) {
+//        Long id = insert(
+//                INSERT_QUERY,
+//                film.getName(),
+//                film.getDescription(),
+//                LocalDate.from(film.getReleaseDate()),
+//                film.getDuration(),
+//                film.getMpa()
+//        );
+//        film.setId(id);
+//        return film;
+//    }
 
 
 }

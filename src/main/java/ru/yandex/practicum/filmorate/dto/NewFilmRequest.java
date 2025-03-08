@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.validation.AfterOrEqualData;
@@ -26,5 +27,7 @@ public class NewFilmRequest {
     private int duration;
     @NotNull
     private Mpa mpa;
+    @NotNull
+    private Director director;
 }
 
