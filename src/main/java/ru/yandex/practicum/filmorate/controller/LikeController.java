@@ -29,15 +29,15 @@ public class LikeController {
 
     @PutMapping("/films/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public Film addLike(@PathVariable @Min(0) Long id, @PathVariable @Min(0) Long userId) {
+    public void addLike(@PathVariable @Min(0) Long id, @PathVariable @Min(0) Long userId) {
         log.info("add like id: {} {}", id, userId);
-        return likeService.addLike(id, userId);
+        likeService.addLike(id, userId);
     }
 
     @DeleteMapping("/films/{id}/like/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public Film delLike(@PathVariable @Min(0) Long id, @PathVariable @Min(0) Long userId) {
+    public void deleteLike(@PathVariable @Min(0) Long id, @PathVariable @Min(0) Long userId) {
         log.info("del like id: {} {}", id, userId);
-        return likeService.delLike(id, userId);
+        likeService.deleteLike(id, userId);
     }
 }

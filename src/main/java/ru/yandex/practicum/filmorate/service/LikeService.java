@@ -3,9 +3,12 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dal.FilmRepository;
+import ru.yandex.practicum.filmorate.dal.LikeRepository;
+import ru.yandex.practicum.filmorate.dal.UserRepository;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.InMemoryLikeStorage;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.List;
 
@@ -13,24 +16,29 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class LikeService {
-    final InMemoryLikeStorage inMemoryLikeStorage;
+    final LikeRepository likeRepository;
+    final FilmRepository filmRepository;
+    final UserRepository userRepository;
 
-    public Film addLike(Long id, Long userId) {
-        return inMemoryLikeStorage.addLike(id, userId);
+    public void addLike(Long id, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found " + userId));
+        Film film = filmRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Film not found " + id));
+        likeRepository.addLike(film, user);
     }
 
-
-    public Film delLike(Long id, Long userId) {
-        if (inMemoryLikeStorage.containsFilmById(id)) {
-            return inMemoryLikeStorage.delLike(id, userId);
-        } else {
-            throw new NotFoundException("film not found");
-        }
-
+    public void deleteLike(Long id, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found " + userId));
+        Film film = filmRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Film not found " + id));
+        likeRepository.deleteLike(film, user);
     }
 
 
     public List<Film> getTopFilms(int count) {
-        return inMemoryLikeStorage.getTopFilms(count);
+
+        return likeRepository.getTopFilm(count);
     }
 }

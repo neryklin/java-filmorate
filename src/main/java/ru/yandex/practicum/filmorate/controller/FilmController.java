@@ -7,7 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
+import ru.yandex.practicum.filmorate.dto.NewFilmRequest;
+import ru.yandex.practicum.filmorate.dto.UpdateFilmRequest;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.Collection;
@@ -22,32 +24,28 @@ public class FilmController {
 
     @GetMapping("/films")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<Film> films() {
-        return filmService.getInMemoryFilmStorage().getFilms().values();
+    public Collection<FilmDto> films() {
+        return filmService.getFilms();
     }
 
     @GetMapping("/films/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Film film(@PathVariable @Min(0) Long id) {
-        return filmService.getInMemoryFilmStorage().getFilmById(id).get();
+    public FilmDto film(@PathVariable @Min(0) Long id) {
+        return filmService.getFilmsById(id);
     }
 
     @PostMapping("/films")
     @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@Valid @RequestBody Film film) {
-        log.info("start create film: {}", film);
-        filmService.save(film);
-        log.info("stop create film: {}", film);
-        return film;
+    public FilmDto create(@Valid @RequestBody NewFilmRequest newFilmRequest) {
+        log.info("start create film: {}", newFilmRequest);
+        return filmService.createFilm(newFilmRequest);
     }
 
     @PutMapping("/films")
     @ResponseStatus(HttpStatus.OK)
-    public Film update(@Valid @RequestBody Film film) {
-        log.info("start update film: {}", film);
-        filmService.update(film);
-        log.info("stop update film: {}", film);
-        return film;
+    public FilmDto update(@Valid @RequestBody UpdateFilmRequest updateFilmRequest) {
+        log.info("start update film: {}", updateFilmRequest);
+        return filmService.updateFilm(updateFilmRequest.getId(), updateFilmRequest);
 
     }
 
