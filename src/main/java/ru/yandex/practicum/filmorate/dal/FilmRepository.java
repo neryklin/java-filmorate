@@ -19,9 +19,9 @@ public class FilmRepository extends BaseRepository<Film> {
             JOIN FILMGENRE ON film.ID =FILMGENRE.FILM_ID
             JOIN GENRE ON FILMGENRE.GENRE_ID =genre.ID""";
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM film WHERE id = ?";
-    private static final String INSERT_QUERY = "INSERT INTO film(name,description, releaseDate, duration, mpa_id)" +
-            " VALUES (?, ?, ?, ?,?)";
-    private static final String UPDATE_QUERY = "UPDATE film SET name = ?, description = ?, releaseDate = ?, duration = ?, mpa_id=?  WHERE id = ?";
+    private static final String INSERT_QUERY = "INSERT INTO film(name,description, releaseDate, duration, mpa_id, director_id)" +
+            " VALUES (?, ?, ?, ?,?,?)";
+    private static final String UPDATE_QUERY = "UPDATE film SET name = ?, description = ?, releaseDate = ?, duration = ?, mpa_id=?, director_id=?  WHERE id = ?";
     private final FilmGenreRepository filmGenreRepository;
     private final MpaRepository mpaRepository;
 
@@ -33,6 +33,11 @@ public class FilmRepository extends BaseRepository<Film> {
 
     public List<Film> findAll() {
         return findMany(FIND_ALL_QUERY);
+    }
+
+
+    public List<Film> getFilmsDirectorBy(Long id, String sorted){
+
     }
 
 
@@ -61,7 +66,8 @@ public class FilmRepository extends BaseRepository<Film> {
                 film.getDescription(),
                 LocalDate.from(film.getReleaseDate()),
                 film.getDuration(),
-                film.getMpa().getId()
+                film.getMpa().getId(),
+                film.getDirector().getId()
         );
         film.setId(id);
         return film;
@@ -76,6 +82,7 @@ public class FilmRepository extends BaseRepository<Film> {
                 LocalDate.from(film.getReleaseDate()),
                 film.getDuration(),
                 film.getMpa().getId(),
+                film.getDirector().getId(),
                 film.getId()
         );
         return film;

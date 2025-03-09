@@ -16,7 +16,7 @@ import java.util.HashSet;
 
 @Data
 public class NewFilmRequest {
-    HashSet<Genre> genres;
+
     @NotBlank
     private String name;
     @Size(max = 200)
@@ -27,7 +27,8 @@ public class NewFilmRequest {
     private int duration;
     @NotNull
     private Mpa mpa;
-    @NotNull
+    private HashSet<Genre> genres;
+   // @NotNull
     private Director director;
 }
 

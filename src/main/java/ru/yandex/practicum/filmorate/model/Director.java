@@ -12,4 +12,5 @@ public class Director {
     private long id;
     @NotBlank
     private String name;
+    private Boolean deleted;
 }

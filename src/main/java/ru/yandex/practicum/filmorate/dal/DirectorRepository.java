@@ -17,8 +17,10 @@ public class DirectorRepository extends BaseRepository<Director> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM director WHERE id = ?";
     private static final String INSERT_QUERY = "INSERT INTO director(name)" +
             " VALUES (?)";
-    private static final String UPDATE_QUERY = "UPDATE director SET name = ? WHERE id = ?"+
-            " VALUES (?,?)";
+    private static final String UPDATE_QUERY = "UPDATE director SET name = ? WHERE id = ?";
+    private static final String DELETE_QUERY = "UPDATE director SET deleted=true WHERE id = ?";
+//    +
+//            " VALUES (?,?)";
 
     public DirectorRepository(JdbcTemplate jdbc, RowMapper<Director> mapper) {
         super(jdbc, mapper);
@@ -48,6 +50,14 @@ public class DirectorRepository extends BaseRepository<Director> {
                 director.getId()
         );
         return director;
+    }
+
+    public boolean delete(Long id) {
+        update(
+                DELETE_QUERY,
+                id
+        );
+        return true;
     }
 
 }

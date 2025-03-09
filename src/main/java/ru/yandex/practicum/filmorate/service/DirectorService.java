@@ -12,9 +12,12 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
 import ru.yandex.practicum.filmorate.model.Director;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,16 +32,10 @@ public class DirectorService {
                 .collect(Collectors.toList());
     }
 
-    public Director getDirectorById(Long id) {
-        Director director = directorRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Director не найден"));
-        return director;
-    }
-
 
     public Director updateDirector(long directorID, Director request) {
         Director updatedFDirector= directorRepository.findById(directorID)
-                .orElseThrow(() -> new NotFoundException("Фильм не найден"));
+                .orElseThrow(() -> new NotFoundException("Director не найден"));
         updatedFDirector.setName(request.getName());
         return directorRepository.update(updatedFDirector);
     }
@@ -50,5 +47,21 @@ public class DirectorService {
         return directorRepository.create(request);
     }
 
+
+    public boolean deleteDirector(Long id) {
+        return directorRepository.delete(id);
+    }
+
+//    public boolean checkDirectorList(HashSet<Director> setDirector) {
+//        List<Long> arrayListDirector = getDirectors().stream()
+//                .map(Director::getId)
+//                .toList();
+//        for (Director director : setDirector) {
+//            if (arrayListDirector.contains(director.getId()) == false) {
+//                throw new NotFoundException("Director не найден");
+//            }
+//        }
+//        return true;
+//    }
 
 }

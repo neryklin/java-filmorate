@@ -42,12 +42,19 @@ public final class FilmMapper {
         film.setReleaseDate(request.getReleaseDate());
         film.setDuration(request.getDuration());
         film.setMpa(new Mpa(request.getMpa().getId(), request.getMpa().getName()));
-        film.setDirector(new Director(request.getDirector().getId(), request.getDirector().getName()));
+        film.setDirector(getNewDirector(request.getDirector()));
 
         film.setGenres(request.getGenres());
         return film;
     }
+    public static Director getNewDirector(Director request){
+        if (request==null) {
+            return new Director();
+        }else {
+           return new Director(request.getId(), request.getName(), request.getDeleted());
+        }
 
+    }
 
     public static Film updateFilmFields(Film film, UpdateFilmRequest request) {
         if (request.hasName()) {

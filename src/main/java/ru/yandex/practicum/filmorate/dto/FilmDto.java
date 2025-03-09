@@ -19,6 +19,7 @@ public class FilmDto {
     private LocalDate releaseDate;
     private int duration;
     private Mpa mpa;
+//     private HashSet<Director> director;
     private Director director;
     private HashSet<Genre> genres;
 }

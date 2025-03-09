@@ -15,7 +15,7 @@ import java.util.HashSet;
 
 @Data
 public class UpdateFilmRequest {
-    private HashSet<Genre> genres;
+
     private long id;
     @NotBlank
     private String name;
@@ -27,8 +27,10 @@ public class UpdateFilmRequest {
     private int duration;
     @NotNull
     private Mpa mpa;
-    @NotNull
-    private Director director;
+    private HashSet<Genre> genres;
+//    private HashSet<Director> directors;
+    private Director directors;
+
 
     public boolean hasName() {
         return !(name == null || name.isBlank());

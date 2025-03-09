@@ -25,8 +25,8 @@ public class LikeRepository {
             ORDER BY TOP DESC
             LIMIT :toplimit) AS lk
             JOIN FILM ON lk.FILM_ID =film.ID)AS topfilm
-            join FILMGENRE ON topfilm.id=FILMGENRE.FILM_ID
-            JOIN genre ON FILMGENRE.GENRE_ID = genre.ID
+            LEFT join FILMGENRE ON topfilm.id=FILMGENRE.FILM_ID
+            LEFT JOIN genre ON FILMGENRE.GENRE_ID = genre.ID
             """;
     protected final RowMapper<Film> mapper;
     private final NamedParameterJdbcOperations jdbc;

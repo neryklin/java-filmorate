@@ -15,7 +15,8 @@ public class DirectorRowMapper implements RowMapper<Director> {
     @Override
     public Director mapRow(ResultSet resultSet, int rowNum) throws SQLException {
         Director director = new Director(resultSet.getLong("id"),
-                resultSet.getString("name")
+                resultSet.getString("name"),
+                resultSet.getBoolean("deleted")
         );
         return director;
     }

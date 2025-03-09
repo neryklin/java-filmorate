@@ -11,6 +11,8 @@ import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.dto.NewFilmRequest;
 import ru.yandex.practicum.filmorate.dto.UpdateFilmRequest;
 import ru.yandex.practicum.filmorate.model.Director;
+import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.DirectorService;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
@@ -48,8 +50,13 @@ public class DirectorController {
     public Director update(@Valid @RequestBody Director updateDirectorRequest) {
         log.info("start update director: {}", updateDirectorRequest);
         return directorService.updateDirector(updateDirectorRequest.getId(), updateDirectorRequest);
-
     }
 
+    @DeleteMapping("/directors/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean deleteDirector(@Valid @PathVariable @Min(0) Long id) {
+        log.info("del director id: {} {}", id, id);
+        return directorService.deleteDirector(id);
+    }
 
 }

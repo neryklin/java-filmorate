@@ -2,9 +2,7 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dal.FilmGenreRepository;
-import ru.yandex.practicum.filmorate.dal.FilmRepository;
-import ru.yandex.practicum.filmorate.dal.GenreRepository;
+import ru.yandex.practicum.filmorate.dal.*;
 import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.dto.NewFilmRequest;
 import ru.yandex.practicum.filmorate.dto.UpdateFilmRequest;
@@ -22,7 +20,9 @@ public class FilmService {
 
     private final FilmRepository filmRepository;
     private final FilmGenreRepository filmGenreRepository;
+    //private final FilmDirectorRepository filmDirectorRepository;
     private final GenreRepository genreRepository;
+    //private final DirectorService directorService;
     private final GenreService genreService;
     private final MpaService mpaService;
 
@@ -38,6 +38,9 @@ public class FilmService {
         return FilmMapper.mapToFilmDto(filmRepository.findById(id).get());
     }
 
+    public Collection<FilmDto> getFilmsDirectorBy(Long id, String sorted){
+        return FilmMapper.mapToFilmDto(filmRepository.getFilmsDirectorBy(id,sorted));
+    }
 
     public FilmDto createFilm(NewFilmRequest request) {
         if (request.getName() == null || request.getName().isEmpty()) {
@@ -52,6 +55,9 @@ public class FilmService {
         if (request.getGenres() != null && genreService.checkGerneList(request.getGenres()) != false) {
             Long id = filmGenreRepository.save(film);
         }
+//        if (request.getDirectors() != null && directorService.checkDirectorList(request.getDirectors()) != false) {
+//            Long id = filmDirectorRepository.save(film);
+//        }
 
         return FilmMapper.mapToFilmDto(film);
     }

@@ -23,7 +23,8 @@ public class FilmRowMapper implements RowMapper<Film> {
                 resultSet.getDate("releasedate").toLocalDate(),
                 resultSet.getInt("duration"),
                 new Mpa(resultSet.getLong("mpa_id"), ""),
-                new Director(resultSet.getLong("director_id"), ""),
+                new Director(resultSet.getLong("director_id"), "",false),
+               // new HashSet<Director>(),
                 new HashSet<Genre>()
         );
         return film;
